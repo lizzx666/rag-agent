@@ -2197,7 +2197,7 @@ wheels = [
 [[package]]
 name = "rag-agent"
 version = "0.1.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "langchain-chroma" },
     { name = "langchain-community" },
