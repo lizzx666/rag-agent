@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from typing import TypedDict
+from pydantic import BaseModel, Field
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -14,7 +15,8 @@ from index import get_vectorstore   # reuse the same store and embedding setting
 # ---------- 1) State ----------
 class RAGState(TypedDict):
     question: str
-    documents: list[Document]   # chunks returned by the retriever
+    queries: list[str]          # NEW: rewritten search queries (multi-query version only)
+    documents: list[Document]
     answer: str
 
 
@@ -24,11 +26,12 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, timeout=60, max_retries=2)
 
+TOP_N = 5   # chunks passed to the answer step; same as the baseline k, so the comparison is fair
 
-# ---------- 3) Helpers ----------
+
+# ---------- 3) Answer generation (unchanged from step 2) ----------
 def format_docs(docs: list[Document]) -> str:
-    """Join chunks into one context string, each labelled with its source,
-    so the model can cite where each fact came from."""
+    """Join chunks into one context string, each labelled with its source."""
     parts = []
     for doc in docs:
         source = f"[{doc.metadata['paper']}, p.{doc.metadata['page']}]"
@@ -48,10 +51,60 @@ ANSWER_PROMPT = ChatPromptTemplate.from_template(
 answer_chain = ANSWER_PROMPT | llm | StrOutputParser()
 
 
-# ---------- 4) Nodes ----------
+# ---------- 4) Multi-query generation (structured output) ----------
+class SearchQueries(BaseModel):
+    queries: list[str] = Field(description="Alternative search queries for a vector database of research papers")
+
+
+QUERY_PROMPT = ChatPromptTemplate.from_template(
+    "You help retrieve passages from research papers on LLM post-training and RAG.\n"
+    "Write {n} different search queries for the question below. Each query should approach it "
+    "from a different angle or use different terminology.\n"
+    "If the question compares several methods, write at least one query focused on each method.\n\n"
+    "Question: {question}"
+)
+
+query_chain = QUERY_PROMPT | llm.with_structured_output(SearchQueries)
+
+
+# ---------- 5) Reciprocal Rank Fusion ----------
+def doc_key(doc: Document) -> str:
+    """A unique id for a chunk: which paper, which page, and where on the page it starts."""
+    m = doc.metadata
+    return f"{m['paper']}|{m['page']}|{m.get('start_index')}"
+
+
+def reciprocal_rank_fusion(results: list[list[Document]], k: int = 60, top_n: int = TOP_N) -> list[Document]:
+    """Fuse several ranked lists into one. A chunk scores higher if it appears
+    in more lists and near the top of them."""
+    scores: dict[str, float] = {}
+    docs_by_key: dict[str, Document] = {}
+    for docs in results:
+        for rank, doc in enumerate(docs):
+            key = doc_key(doc)
+            if key not in scores:
+                scores[key] = 0
+                docs_by_key[key] = doc
+            scores[key] += 1 / (rank + k)
+    ranked_keys = sorted(scores, key=scores.get, reverse=True)
+    return [docs_by_key[key] for key in ranked_keys[:top_n]]
+
+
+# ---------- 6) Nodes ----------
 def retrieve(state: RAGState):
-    documents = retriever.invoke(state["question"])
-    return {"documents": documents}
+    """Baseline: one search with the original question."""
+    return {"documents": retriever.invoke(state["question"])}
+
+
+def generate_queries(state: RAGState):
+    generated_queries = query_chain.invoke({"question": state["question"], "n": 4})
+    return {"queries": [state["question"]] + generated_queries.queries}
+
+
+def retrieve_fused(state: RAGState):
+    """Multi-query: search with every query (in parallel), then fuse with RRF."""
+    results = retriever.batch(state["queries"])
+    return {"documents": reciprocal_rank_fusion(results)}
 
 
 def generate(state: RAGState):
@@ -60,32 +113,45 @@ def generate(state: RAGState):
     return {"answer": answer}
 
 
-# ---------- 5) Graph ----------
-builder = StateGraph(RAGState)
+# ---------- 7) Graph ----------
+def build_graph(multi_query: bool):
+    builder = StateGraph(RAGState)
 
-# Nodes
-builder.add_node("retrieve", retrieve)
-builder.add_node("generate", generate)
+    # Nodes ("retrieve" is the same node name in both versions, backed by a different function)
+    builder.add_node("retrieve", retrieve_fused if multi_query else retrieve)
+    builder.add_node("generate", generate)
+    if multi_query:
+        builder.add_node("generate_queries", generate_queries)
 
-#Edges
-builder.add_edge(START, "retrieve")
-builder.add_edge("retrieve", "generate")
-builder.add_edge("generate", END)
+    # Edges
+    if multi_query:
+        builder.add_edge(START, "generate_queries")
+        builder.add_edge("generate_queries", "retrieve")
+    else:
+        builder.add_edge(START, "retrieve")
+    builder.add_edge("retrieve", "generate")
+    builder.add_edge("generate", END)
+
+    return builder.compile()
 
 
-graph = builder.compile()
-
-
-# ---------- 6) Run ----------
+# ---------- 8) Run: baseline vs multi-query ----------
 if __name__ == "__main__":
+    baseline = build_graph(multi_query=False)
+    multi = build_graph(multi_query=True)
+
     questions = [
-        "How does QLoRA reduce memory usage during fine-tuning?",
         "What is the difference between DPO and PPO?",
-        "What is the capital of France?",   # not in the papers: the model should say it doesn't know
+        "How does QLoRA reduce memory usage during fine-tuning?",
     ]
     for q in questions:
-        result = graph.invoke({"question": q})
-        print("\n" + "=" * 80)
-        print("Q:", q)
-        print("Retrieved from:", [f"{d.metadata['paper']} p.{d.metadata['page']}" for d in result["documents"]])
-        print("\nA:", result["answer"])
+        for name, graph in [("BASELINE", baseline), ("MULTI-QUERY", multi)]:
+            result = graph.invoke({"question": q})
+            print("\n" + "=" * 80)
+            print(f"[{name}] Q: {q}")
+            if "queries" in result:
+                print("Queries:")
+                for query in result["queries"]:
+                    print("  -", query)
+            print("Retrieved from:", [f"{d.metadata['paper']} p.{d.metadata['page']}" for d in result["documents"]])
+            print("\nA:", result["answer"])
