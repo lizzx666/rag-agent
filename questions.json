@@ -1,0 +1,237 @@
+[
+  {
+    "id": "q01",
+    "question": "In the MT-Bench / Chatbot Arena paper, what approach do the authors propose to automate the human evaluation of chat assistants, and why do they expect it to work?",
+    "answer": "They propose using strong LLMs such as GPT-4 as a surrogate for human judges, called LLM-as-a-judge. Because these models are often trained with RLHF, they already exhibit strong alignment with human preferences.",
+    "key_points": [
+      "uses strong LLMs (e.g. GPT-4) as judges in place of humans",
+      "the approach is called LLM-as-a-judge",
+      "reason: models trained with RLHF are already aligned with human preferences"
+    ],
+    "required_sources": ["llm_as_judge_mtbench"],
+    "optional_sources": [],
+    "evidence": ["We explore the use of state-of-the-art LLMs, such as GPT-4, as a surrogate for humans"],
+    "type": "conceptual",
+    "dev": false
+  },
+  {
+    "id": "q02",
+    "question": "According to the MT-Bench / Chatbot Arena paper, what are the main advantages of LLM-as-a-judge?",
+    "answer": "Two key benefits: scalability, because it reduces the need for human involvement and enables scalable benchmarks and fast iteration; and explainability, because LLM judges provide explanations as well as scores.",
+    "key_points": [
+      "scalability: less human involvement, scalable benchmarks and fast iteration",
+      "explainability: judges give explanations, not only scores"
+    ],
+    "required_sources": ["llm_as_judge_mtbench"],
+    "optional_sources": [],
+    "evidence": ["LLM-as-a-judge offers two key benefits: scalability and explainability"],
+    "type": "conceptual",
+    "dev": false
+  },
+  {
+    "id": "q03",
+    "question": "What clustering algorithm does RAPTOR use to group text chunks?",
+    "answer": "RAPTOR's clustering is based on Gaussian Mixture Models (GMMs).",
+    "key_points": [
+      "Gaussian Mixture Models (GMMs)"
+    ],
+    "required_sources": ["raptor"],
+    "optional_sources": [],
+    "evidence": ["Our clustering algorithm is based on Gaussian Mixture Models"],
+    "type": "factual",
+    "dev": false
+  },
+  {
+    "id": "q04",
+    "question": "In LoRA, how is the update to a pre-trained weight matrix represented, and how are the low-rank matrices initialized?",
+    "answer": "The pre-trained weight W0 is frozen and the update is written as a low-rank product, delta W = BA, where the rank r is much smaller than the matrix dimensions. A is initialized with a random Gaussian and B with zeros, so delta W is zero at the start of training.",
+    "key_points": [
+      "the pre-trained weights are frozen",
+      "the update is a low-rank product BA with small rank r",
+      "A uses a random Gaussian initialization and B is initialized to zero",
+      "so the update is zero at the beginning of training"
+    ],
+    "required_sources": ["lora"],
+    "optional_sources": [],
+    "evidence": ["We use a random Gaussian initialization for A"],
+    "type": "conceptual",
+    "dev": false
+  },
+  {
+    "id": "q05",
+    "question": "How does HyDE decompose dense retrieval?",
+    "answer": "HyDE decomposes dense retrieval into two tasks: a generative task, where an instruction-following language model writes a hypothetical document, and a document-document similarity task performed by a contrastive encoder.",
+    "key_points": [
+      "a generative task performed by an instruction-following language model",
+      "a document-document similarity task performed by a contrastive encoder"
+    ],
+    "required_sources": ["hyde"],
+    "optional_sources": [],
+    "evidence": ["decompose dense retrieval into two tasks"],
+    "type": "conceptual",
+    "dev": false
+  },
+  {
+    "id": "q06",
+    "question": "Which question-answering datasets are used to evaluate RAPTOR?",
+    "answer": "Three datasets: NarrativeQA (books and movie transcripts), QASPER (questions over NLP papers) and QuALITY (multiple-choice questions over passages of about 5,000 tokens).",
+    "key_points": [
+      "NarrativeQA",
+      "QASPER",
+      "QuALITY"
+    ],
+    "required_sources": ["raptor"],
+    "optional_sources": [],
+    "evidence": ["We measure RAPTOR"],
+    "type": "factual",
+    "dev": false
+  },
+  {
+    "id": "q07",
+    "question": "In the original RAG paper by Lewis et al., what is the Q-BLEU metric?",
+    "answer": "Q-BLEU is a variant of BLEU that gives a higher weight to matching entities, and it correlates better with human judgment for question generation than standard metrics.",
+    "key_points": [
+      "a variant of BLEU",
+      "gives higher weight to matching entities",
+      "correlates better with human judgment for question generation"
+    ],
+    "required_sources": ["rag_lewis"],
+    "optional_sources": [],
+    "evidence": ["is a variant of BLEU with a higher weight for matching entities"],
+    "type": "factual",
+    "dev": false
+  },
+  {
+    "id": "q08",
+    "question": "On average, how many bits per parameter does QLoRA's double quantization save?",
+    "answer": "About 0.37 bits per parameter, roughly 3 GB for a 65B model.",
+    "key_points": [
+      "about 0.37 bits per parameter"
+    ],
+    "required_sources": ["qlora"],
+    "optional_sources": [],
+    "evidence": ["saving an average of about 0.37 bits per parameter"],
+    "type": "factual",
+    "dev": false
+  },
+  {
+    "id": "q09",
+    "question": "What special tokens does Self-RAG introduce, and what are they used for?",
+    "answer": "Self-RAG introduces reflection tokens, which come in two kinds: retrieval tokens, which indicate whether retrieval is needed, and critique tokens, which assess the relevance of retrieved passages and the quality of the generated output.",
+    "key_points": [
+      "reflection tokens",
+      "retrieval tokens decide whether to retrieve",
+      "critique tokens evaluate the generation and retrieved passages"
+    ],
+    "required_sources": ["self_rag"],
+    "optional_sources": [],
+    "evidence": ["Reflection tokens are categorized into retrieval and critique tokens"],
+    "type": "conceptual",
+    "dev": false
+  },
+  {
+    "id": "q10",
+    "question": "How does DPO differ from the PPO-based RLHF pipeline used in InstructGPT?",
+    "answer": "The RLHF pipeline first trains a reward model on human preference comparisons and then optimizes the policy against that reward with PPO, an RL algorithm. DPO skips the explicit reward model and RL: through a change of variables it expresses the preference loss directly in terms of the policy, so the policy can be trained with a simple binary cross-entropy objective on the preference data.",
+    "key_points": [
+      "RLHF trains a separate reward model on human preference data",
+      "RLHF then optimizes the policy against the reward model with PPO (reinforcement learning)",
+      "DPO needs no explicit reward model and no RL",
+      "DPO uses a change of variables and trains with a binary cross-entropy loss on preferences"
+    ],
+    "required_sources": ["dpo"],
+    "optional_sources": ["instructgpt"],
+    "evidence": [
+      "uses a change of variables to define",
+      "Optimize a policy against the reward model using PPO"
+    ],
+    "type": "comparison",
+    "dev": true
+  },
+  {
+    "id": "q11",
+    "question": "How does Self-RAG differ from conventional RAG?",
+    "answer": "Conventional RAG always retrieves a fixed number of passages, whether or not retrieval is needed, and never checks its output. Self-RAG decides on demand whether to retrieve, evaluates the relevance of retrieved passages, and critiques its own generations to choose the best output.",
+    "key_points": [
+      "conventional RAG always retrieves a fixed number of passages",
+      "Self-RAG retrieves only when needed (on demand)",
+      "Self-RAG evaluates passage relevance and critiques its own output"
+    ],
+    "required_sources": ["self_rag"],
+    "optional_sources": ["rag_lewis"],
+    "evidence": ["This process differs from conventional RAG"],
+    "type": "comparison",
+    "dev": false
+  },
+  {
+    "id": "q12",
+    "question": "How does RAPTOR differ from traditional RAG in how it indexes and retrieves documents?",
+    "answer": "Traditional RAG retrieves a few short, contiguous chunks. RAPTOR recursively clusters chunks and summarizes each cluster, building a tree from the bottom up, so it can retrieve text at different levels of abstraction and answer both detailed and high-level questions.",
+    "key_points": [
+      "traditional RAG retrieves only short contiguous chunks",
+      "RAPTOR clusters chunks and summarizes the clusters recursively",
+      "this builds a tree from the bottom up",
+      "retrieval can use different levels of the tree"
+    ],
+    "required_sources": ["raptor"],
+    "optional_sources": ["rag_lewis"],
+    "evidence": ["clusters chunks of text, generates text summaries of those clusters"],
+    "type": "comparison",
+    "dev": false
+  },
+  {
+    "id": "q13",
+    "question": "How does CRAG differ from conventional RAG?",
+    "answer": "Conventional RAG uses retrieved documents indiscriminately, whether or not they are relevant. CRAG adds a lightweight retrieval evaluator that estimates the quality of the retrieved documents and triggers one of three actions: Correct, Incorrect or Ambiguous. For Incorrect and Ambiguous, it adds large-scale web search to make up for the limited static corpus.",
+    "key_points": [
+      "conventional RAG uses retrieved documents regardless of relevance",
+      "CRAG adds a lightweight retrieval evaluator",
+      "three actions: Correct, Incorrect, Ambiguous",
+      "web search is used for the Incorrect and Ambiguous cases"
+    ],
+    "required_sources": ["crag"],
+    "optional_sources": ["rag_lewis"],
+    "evidence": ["indiscriminately incorporate the retrieved"],
+    "type": "comparison",
+    "dev": false
+  },
+  {
+    "id": "q14",
+    "question": "How does GRPO estimate advantages without a learned value model?",
+    "answer": null,
+    "key_points": [],
+    "required_sources": [],
+    "optional_sources": [],
+    "evidence": [],
+    "absent_keywords": ["GRPO", "Group Relative Policy Optimization"],
+    "type": "unanswerable",
+    "dev": false
+  },
+  {
+    "id": "q15",
+    "question": "How does speculative decoding speed up LLM inference?",
+    "answer": null,
+    "key_points": [],
+    "required_sources": [],
+    "optional_sources": [],
+    "evidence": [],
+    "absent_keywords": ["speculative decoding", "draft model"],
+    "type": "unanswerable",
+    "dev": false
+  },
+  {
+    "id": "q16",
+    "question": "What innovations does QLoRA introduce to reduce memory use without sacrificing performance?",
+    "answer": "Three innovations: 4-bit NormalFloat (NF4), an information-theoretically optimal data type for normally distributed weights; Double Quantization, which quantizes the quantization constants; and Paged Optimizers, which use NVIDIA unified memory to avoid memory spikes.",
+    "key_points": [
+      "4-bit NormalFloat (NF4)",
+      "Double Quantization (quantizing the quantization constants)",
+      "Paged Optimizers to handle memory spikes"
+    ],
+    "required_sources": ["qlora"],
+    "optional_sources": [],
+    "evidence": ["introduces multiple innovations designed to reduce memory use"],
+    "type": "conceptual",
+    "dev": true
+  }
+]

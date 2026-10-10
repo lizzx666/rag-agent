@@ -1,0 +1,1357 @@
+{
+  "baseline": [
+    {
+      "id": "q01",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The authors propose the LLM-as-a-judge approach to automate the human evaluation of chat assistants. They expect it to work because strong LLMs, such as GPT-4, can achieve an agreement rate of over 80% with human experts, which is comparable to the level of agreement among human evaluators. This establishes a foundation for an effective automated evaluation method that can enhance chatbot quality and user experiences [llm_as_judge_mtbench, p.9].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench",
+        "qlora"
+      ],
+      "latency": 6.43,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q01",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The authors propose the LLM-as-a-judge approach to automate the human evaluation of chat assistants. They expect it to work because strong LLMs, such as GPT-4, can achieve an agreement rate of over 80% with human experts, which is comparable to the level of agreement among human evaluators. This establishes a foundation for an effective automated evaluation method that aligns with human preferences [llm_as_judge_mtbench, p.9].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench",
+        "qlora"
+      ],
+      "latency": 4.49,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q02",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The main advantages of LLM-as-a-judge, according to the MT-Bench / Chatbot Arena paper, include its scalability and ability to approximate human preferences effectively, achieving over 80% agreement with human evaluations. This method serves as a promising alternative to traditional human evaluations, which are costly and laborious. Additionally, LLM-as-a-judge can swiftly evaluate both the core capabilities and human alignment of models by combining capability-based benchmarks with preference-based benchmarks [llm_as_judge_mtbench, p.2].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 2.98,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q02",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The main advantages of LLM-as-a-judge, according to the MT-Bench / Chatbot Arena paper, include its scalability and ability to approximate human preferences effectively, achieving over 80% agreement with human evaluations. This method serves as a promising alternative to traditional human evaluations, which are costly and laborious. Additionally, LLM-as-a-judge can swiftly evaluate both the core capabilities and human alignment of models by combining capability-based benchmarks with preference-based benchmarks [llm_as_judge_mtbench, p.2].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 2.35,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q03",
+      "type": "factual",
+      "dev": false,
+      "answer": "RAPTOR uses a clustering algorithm based on Gaussian Mixture Models (GMMs) to group text chunks [raptor, p.2].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 1.44,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q03",
+      "type": "factual",
+      "dev": false,
+      "answer": "RAPTOR uses a clustering algorithm based on Gaussian Mixture Models (GMMs) to group text chunks [raptor, p.2].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 2.08,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q04",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "In LoRA, the update to a pre-trained weight matrix is represented as ∆W, which is the accumulated gradient update during adaptation. The low-rank matrices are initialized as smaller matrices that are injected into the model, allowing for efficient adaptation while keeping the pre-trained weights frozen [lora, p.1].",
+      "retrieved_papers": [
+        "lora"
+      ],
+      "latency": 2.13,
+      "retrieval_hit": true,
+      "coverage": 0.25,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q04",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "In LoRA, the update to a pre-trained weight matrix is represented as ∆W, which is the accumulated gradient update during adaptation. The low-rank matrices A and B are injected into the model, and their rank r can be set to a very low value (e.g., one or two) to maintain efficiency while adapting the model for different tasks [lora, p.1].",
+      "retrieved_papers": [
+        "lora"
+      ],
+      "latency": 2.6,
+      "retrieval_hit": true,
+      "coverage": 0.25,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q05",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "HyDE decomposes dense retrieval by casting the retrieval task into two natural language understanding (NLU) and natural language generation (NLG) tasks. It uses a generative model to produce an intermediate hypothetical document, which is then fed into a dense encoder. The query-document similarity score is no longer explicitly modeled or computed, and the retrieval leverages document-document similarity encoded in the inner product during contrastive training [hyde, p.1].",
+      "retrieved_papers": [
+        "hyde"
+      ],
+      "latency": 2.27,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q05",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "HyDE decomposes dense retrieval by casting the retrieval task into two natural language understanding (NLU) and natural language generation (NLG) tasks. It uses a generative model to produce an intermediate hypothetical document, which is then fed into a dense encoder. The query-document similarity score is no longer explicitly modeled or computed, and the retrieval leverages document-document similarity encoded in the inner product during contrastive training [hyde, p.1].",
+      "retrieved_papers": [
+        "hyde"
+      ],
+      "latency": 2.03,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q06",
+      "type": "factual",
+      "dev": false,
+      "answer": "The question-answering datasets used to evaluate RAPTOR are NarrativeQA, QASPER, and QuALITY [raptor, p.5].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 4.1,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q06",
+      "type": "factual",
+      "dev": false,
+      "answer": "The question-answering datasets used to evaluate RAPTOR are NarrativeQA, QASPER, and QuALITY [raptor, p.5].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 2.72,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q07",
+      "type": "factual",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "crag",
+        "rag_lewis",
+        "raptor",
+        "self_rag"
+      ],
+      "latency": 1.12,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": true,
+      "run": 0
+    },
+    {
+      "id": "q07",
+      "type": "factual",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "crag",
+        "rag_lewis",
+        "raptor",
+        "self_rag"
+      ],
+      "latency": 1.47,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": true,
+      "run": 1
+    },
+    {
+      "id": "q08",
+      "type": "factual",
+      "dev": false,
+      "answer": "QLoRA's double quantization saves an average of about 0.373 bits per parameter [qlora, p.4].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 1.34,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q08",
+      "type": "factual",
+      "dev": false,
+      "answer": "QLoRA's double quantization saves an average of about 0.373 bits per parameter [qlora, p.4].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 1.77,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q09",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "Self-RAG introduces special tokens called reflection tokens. These tokens are used to enable the model to evaluate its own predictions after each generated segment, allowing for a soft re-ranking mechanism or hard constraints during inference. They help in tailoring the model's behavior to diverse task requirements and enhance overall generation quality, factuality, and verifiability [self_rag, p.5].",
+      "retrieved_papers": [
+        "self_rag"
+      ],
+      "latency": 2.44,
+      "retrieval_hit": true,
+      "coverage": 0.3333333333333333,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q09",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "Self-RAG introduces special tokens called reflection tokens. These tokens are used to enable the model to evaluate its own predictions after each generated segment, allowing for a soft re-ranking mechanism or hard constraints during inference. They help in tailoring the model's behavior to diverse task requirements and enhance overall generation quality, factuality, and verifiability [self_rag, p.5].",
+      "retrieved_papers": [
+        "self_rag"
+      ],
+      "latency": 4.7,
+      "retrieval_hit": true,
+      "coverage": 0.3333333333333333,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q10",
+      "type": "comparison",
+      "dev": true,
+      "answer": "DPO differs from the PPO-based RLHF pipeline used in InstructGPT by bypassing the need to fit an explicit reward and perform reinforcement learning (RL) to learn the policy. Instead, DPO uses a single maximum likelihood objective, which allows it to optimize the parametric model directly without the complexities associated with actor-critic algorithms like PPO. This approach enables DPO to achieve a better reward/KL tradeoff and performance frontier compared to PPO, even when PPO has access to ground truth rewards [dpo, p.4][dpo, p.8].",
+      "retrieved_papers": [
+        "dpo"
+      ],
+      "latency": 2.09,
+      "retrieval_hit": true,
+      "coverage": 0.25,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q10",
+      "type": "comparison",
+      "dev": true,
+      "answer": "DPO differs from the PPO-based RLHF pipeline used in InstructGPT in that DPO does not require fitting an explicit reward function or performing reinforcement learning (RL) to learn the policy. Instead, it uses a single maximum likelihood objective, which allows it to bypass the complexities associated with actor-critic algorithms like PPO. Additionally, DPO's reward/KL tradeoff strictly dominates that of PPO, and it achieves better performance even when PPO has access to ground truth rewards [dpo, p.4][dpo, p.8].",
+      "retrieved_papers": [
+        "dpo"
+      ],
+      "latency": 2.74,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q11",
+      "type": "comparison",
+      "dev": false,
+      "answer": "Self-RAG differs from conventional RAG in that it enables retrieval on demand and selection of the best possible model output via fine-grained self-reflection. While conventional RAG processes retrieved passages in a more straightforward manner, Self-RAG concurrently processes multiple retrieved passages, evaluates their relevance, and generates corresponding task outputs. It also generates critique tokens to criticize its own output and choose the best one based on factuality and overall quality, which is not a feature of conventional RAG [self_rag, p.0].",
+      "retrieved_papers": [
+        "crag",
+        "self_rag"
+      ],
+      "latency": 4.41,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q11",
+      "type": "comparison",
+      "dev": false,
+      "answer": "Self-RAG differs from conventional RAG in that it enables retrieval on demand and selection of the best possible model output via fine-grained self-reflection. While conventional RAG processes retrieved passages in a more straightforward manner, Self-RAG concurrently processes multiple retrieved passages, evaluates their relevance, and generates corresponding task outputs. It also generates critique tokens to criticize its own output and choose the best one based on factuality and overall quality, which is not a feature of conventional RAG [self_rag, p.0].",
+      "retrieved_papers": [
+        "crag",
+        "self_rag"
+      ],
+      "latency": 4.18,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q12",
+      "type": "comparison",
+      "dev": false,
+      "answer": "RAPTOR differs from traditional RAG by using a recursive tree structure that captures both high-level and low-level details about a text. It clusters chunks of text, generates summaries of those clusters, and builds the tree from the bottom up. This allows RAPTOR to load into an LLM’s context chunks representing the text at different levels, enabling it to effectively and efficiently answer questions at varying levels of granularity. In contrast, traditional RAG typically does not utilize such a multi-layered structure for indexing and retrieval [raptor, p.0].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 5.85,
+      "retrieval_hit": true,
+      "coverage": 0.75,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q12",
+      "type": "comparison",
+      "dev": false,
+      "answer": "RAPTOR differs from traditional RAG by using a recursive tree structure that captures both high-level and low-level details about a text. It clusters chunks of text, generates summaries of those clusters, and builds the tree from the bottom up. This allows RAPTOR to load into an LLM’s context chunks representing the text at different levels, enabling it to effectively and efficiently answer questions at varying levels of granularity. In contrast, traditional RAG techniques typically do not employ such a multi-layered structure for indexing and retrieval [raptor, p.0].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 2.83,
+      "retrieval_hit": true,
+      "coverage": 0.75,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q13",
+      "type": "comparison",
+      "dev": false,
+      "answer": "CRAG differs from conventional RAG by implementing a plug-and-play method that enhances the ability of automatic self-correction and efficient utilization of retrieved documents. It also incorporates a decompose-then-recompose algorithm to refine retrieved information, optimizing the extraction of key insights and minimizing non-essential elements. This approach allows CRAG to improve the performance of standard RAG and state-of-the-art Self-RAG, demonstrating its adaptability and generalizability across various generation tasks [crag, p.1].",
+      "retrieved_papers": [
+        "crag"
+      ],
+      "latency": 3.57,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q13",
+      "type": "comparison",
+      "dev": false,
+      "answer": "CRAG differs from conventional RAG by implementing a plug-and-play method that enhances the ability of automatic self-correction and efficient utilization of retrieved documents. It also incorporates a decompose-then-recompose algorithm to refine retrieved information, optimizing the extraction of key insights and minimizing non-essential elements. This approach allows CRAG to improve the performance of standard RAG and state-of-the-art Self-RAG, demonstrating its adaptability and generalizability across various generation tasks [crag, p.1].",
+      "retrieved_papers": [
+        "crag"
+      ],
+      "latency": 3.34,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q14",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "dpo",
+        "rag_lewis"
+      ],
+      "latency": 1.13,
+      "abstained": true,
+      "run": 0
+    },
+    {
+      "id": "q14",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "dpo",
+        "rag_lewis"
+      ],
+      "latency": 1.83,
+      "abstained": true,
+      "run": 1
+    },
+    {
+      "id": "q15",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "hyde",
+        "llm_as_judge_mtbench",
+        "rag_lewis",
+        "self_rag"
+      ],
+      "latency": 2.03,
+      "abstained": true,
+      "run": 0
+    },
+    {
+      "id": "q15",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "hyde",
+        "llm_as_judge_mtbench",
+        "rag_lewis",
+        "self_rag"
+      ],
+      "latency": 2.29,
+      "abstained": true,
+      "run": 1
+    },
+    {
+      "id": "q16",
+      "type": "conceptual",
+      "dev": true,
+      "answer": "QLoRA introduces several innovations to reduce memory usage without sacrificing performance: (a) 4-bit NormalFloat (NF4), a new data type that is information theoretically optimal for normally distributed weights, (b) Double Quantization, which quantizes the quantization constants, saving an average of about 0.37 bits per parameter, and (c) Paged Optimizers, which use NVIDIA unified memory to avoid memory spikes during gradient checkpointing [qlora, p.0].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 2.83,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q16",
+      "type": "conceptual",
+      "dev": true,
+      "answer": "QLoRA introduces several innovations to reduce memory usage without sacrificing performance: (a) 4-bit NormalFloat (NF4), a new data type that is information theoretically optimal for normally distributed weights, (b) Double Quantization, which quantizes the quantization constants, saving an average of about 0.37 bits per parameter, and (c) Paged Optimizers, which use NVIDIA unified memory to avoid memory spikes during gradient checkpointing [qlora, p.0].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 4.87,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    }
+  ],
+  "multi_query": [
+    {
+      "id": "q01",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The authors propose the use of state-of-the-art LLMs, such as GPT-4, to automate the evaluation of chat assistants. They expect this approach to work because strong LLMs can achieve an agreement rate of over 80% with human preferences, which is comparable to the level of agreement among human experts. This establishes a foundation for an automated and scalable method to evaluate LLM alignment with human preferences [llm_as_judge_mtbench, p.1; llm_as_judge_mtbench, p.9].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 8.34,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q01",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The authors propose using state-of-the-art LLMs, such as GPT-4, to automate the evaluation of chat assistants. They expect this approach to work because it can scale the evaluation process, which is typically slow and costly when relying solely on human ratings. By employing LLMs as judges, they aim to enhance the efficiency and effectiveness of assessing human preferences in chatbot interactions [llm_as_judge_mtbench, p.1].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 5.06,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q02",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The main advantages of LLM-as-a-judge include its ability to achieve an agreement rate of over 80% with human preferences, making it a scalable and explainable method to approximate human evaluations, which are otherwise costly to obtain. Additionally, it serves as a promising alternative to traditional human evaluations and can complement existing capability-based benchmarks with new preference-based benchmarks [llm_as_judge_mtbench, p.0].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 5.22,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q02",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The main advantages of LLM-as-a-judge include its ability to achieve an agreement rate of over 80% with human preferences, making it a scalable and explainable method to approximate human evaluations, which are otherwise costly to obtain. Additionally, it serves as a promising alternative to traditional human evaluations and can complement existing capability-based benchmarks by evaluating both core capabilities and human alignment of models [llm_as_judge_mtbench, p.0].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 4.87,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q03",
+      "type": "factual",
+      "dev": false,
+      "answer": "RAPTOR uses a clustering algorithm based on Gaussian Mixture Models (GMMs) to group text chunks [raptor, p.2].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 6.11,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q03",
+      "type": "factual",
+      "dev": false,
+      "answer": "RAPTOR uses a clustering algorithm based on Gaussian Mixture Models (GMMs) to group text chunks [raptor, p.2].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 4.32,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q04",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "In LoRA, the update to a pre-trained weight matrix is represented as ∆W, which is the accumulated gradient update during adaptation. The low-rank matrices A and B are injected into the model, and their rank r can be set to a low value, such as one or two, to maintain efficiency while adapting the model for different tasks [lora, p.1].",
+      "retrieved_papers": [
+        "lora"
+      ],
+      "latency": 7.34,
+      "retrieval_hit": true,
+      "coverage": 0.25,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q04",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "In LoRA, the update to a pre-trained weight matrix is represented as ∆W, which is the accumulated gradient update during adaptation. The low-rank matrices A and B are injected into the model, and their rank r can be set to a low value (e.g., one or two) to maintain efficiency while adapting the model for downstream tasks [lora, p.1].",
+      "retrieved_papers": [
+        "lora"
+      ],
+      "latency": 5.8,
+      "retrieval_hit": true,
+      "coverage": 0.25,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q05",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "HyDE decomposes dense retrieval into two tasks: natural language understanding (NLU) and natural language generation (NLG). The query-document similarity score is no longer explicitly modeled or computed; instead, the retrieval task is framed in this way. HyDE operates in an unsupervised manner, with no model training involved, as both the generative model and the contrastive encoder remain intact, and supervision signals are only used in the instruction learning of the backbone LLM [hyde, p.1].",
+      "retrieved_papers": [
+        "hyde"
+      ],
+      "latency": 5.03,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q05",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "HyDE decomposes dense retrieval into two tasks: natural language understanding (NLU) and natural language generation (NLG). The query-document similarity score is no longer explicitly modeled or computed; instead, the retrieval task is framed in this way. HyDE uses a generative model to produce an intermediate hypothetical document, which is then encoded by a contrastive encoder to retrieve similar real documents based on vector similarity [hyde, p.1].",
+      "retrieved_papers": [
+        "hyde"
+      ],
+      "latency": 4.24,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q06",
+      "type": "factual",
+      "dev": false,
+      "answer": "The question-answering datasets used to evaluate RAPTOR are NarrativeQA, QASPER, and QuALITY [raptor, p.5].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 4.11,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q06",
+      "type": "factual",
+      "dev": false,
+      "answer": "The question-answering datasets used to evaluate RAPTOR are NarrativeQA, QASPER, and QuALITY [raptor, p.5].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 4.46,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q07",
+      "type": "factual",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "crag",
+        "rag_lewis",
+        "raptor"
+      ],
+      "latency": 3.46,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": true,
+      "run": 0
+    },
+    {
+      "id": "q07",
+      "type": "factual",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "crag",
+        "rag_lewis",
+        "raptor"
+      ],
+      "latency": 6.14,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": true,
+      "run": 1
+    },
+    {
+      "id": "q08",
+      "type": "factual",
+      "dev": false,
+      "answer": "QLoRA's double quantization saves an average of about 0.37 bits per parameter [qlora, p.1].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 7.28,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q08",
+      "type": "factual",
+      "dev": false,
+      "answer": "QLoRA's double quantization saves an average of about 0.37 bits per parameter [qlora, p.1].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 4.15,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q09",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "Self-RAG introduces special tokens called reflection tokens. These tokens are used to evaluate the model's own predictions after each generated segment, enabling a soft re-ranking mechanism or hard constraints during inference. They allow the model to tailor its behavior to diverse task requirements and enhance overall generation quality, factuality, and verifiability [self_rag, p.5].",
+      "retrieved_papers": [
+        "self_rag"
+      ],
+      "latency": 4.68,
+      "retrieval_hit": true,
+      "coverage": 0.3333333333333333,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q09",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "Self-RAG introduces special tokens called reflection tokens. These tokens are used to evaluate the model's own predictions after each generated segment, enabling a soft re-ranking mechanism or hard constraints during inference. They allow the model to tailor its behavior to diverse task requirements and enhance overall generation quality, factuality, and verifiability [self_rag, p.5].",
+      "retrieved_papers": [
+        "self_rag"
+      ],
+      "latency": 6.37,
+      "retrieval_hit": true,
+      "coverage": 0.3333333333333333,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q10",
+      "type": "comparison",
+      "dev": true,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "dpo"
+      ],
+      "latency": 4.05,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": true,
+      "run": 0
+    },
+    {
+      "id": "q10",
+      "type": "comparison",
+      "dev": true,
+      "answer": "DPO differs from the PPO-based RLHF pipeline used in InstructGPT by bypassing the need for fitting an explicit reward and performing reinforcement learning to learn the policy. Instead, DPO optimizes a language model directly to adhere to human preferences using a single maximum likelihood objective, which is simpler to implement and train compared to the more complex PPO approach. DPO increases the relative log probability of preferred responses while incorporating a dynamic, per-example importance weight to prevent model degeneration, which is a challenge in naive probability ratio objectives used in PPO [dpo, p.1].",
+      "retrieved_papers": [
+        "dpo"
+      ],
+      "latency": 6.37,
+      "retrieval_hit": true,
+      "coverage": 0.25,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q11",
+      "type": "comparison",
+      "dev": false,
+      "answer": "Self-RAG differs from conventional RAG in that it continues generation with retrieved passages and outputs a retrieval token that calls a retriever model on demand. It concurrently processes multiple retrieved passages, evaluates their relevance, and generates corresponding task outputs. Additionally, it generates critique tokens to criticize its own output and choose the best one in terms of factuality and overall quality, which is not a feature of conventional RAG [self_rag, p.0].",
+      "retrieved_papers": [
+        "crag",
+        "self_rag"
+      ],
+      "latency": 5.56,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q11",
+      "type": "comparison",
+      "dev": false,
+      "answer": "Self-RAG differs from conventional RAG in that it concurrently processes multiple retrieved passages, evaluates their relevance, and generates corresponding task outputs. It also generates critique tokens to criticize its own output and select the best one based on factuality and overall quality. This self-reflection mechanism allows Self-RAG to be more robust and controllable, as it does not rely on external models at inference [self_rag, p.0].",
+      "retrieved_papers": [
+        "crag",
+        "self_rag"
+      ],
+      "latency": 6.96,
+      "retrieval_hit": true,
+      "coverage": 0.3333333333333333,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q12",
+      "type": "comparison",
+      "dev": false,
+      "answer": "RAPTOR differs from traditional RAG by using a tree structure to capture both high-level and low-level details about a text. This system clusters chunks of text, generates summaries of those clusters, and builds a tree from the bottom up. This allows RAPTOR to load context chunks representing the text at different levels, enabling it to effectively and efficiently answer questions at varying levels of granularity, which is a distinct approach compared to traditional RAG methods [raptor, p.0].",
+      "retrieved_papers": [
+        "crag",
+        "rag_lewis",
+        "raptor"
+      ],
+      "latency": 6.6,
+      "retrieval_hit": true,
+      "coverage": 0.75,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q12",
+      "type": "comparison",
+      "dev": false,
+      "answer": "RAPTOR differs from traditional RAG by using a tree structure to capture both high-level and low-level details about a text. This system clusters chunks of text, generates summaries of those clusters, and builds a tree from the bottom up, allowing RAPTOR to load context chunks representing the text at different levels. This enables it to effectively and efficiently answer questions at varying levels of granularity, which is a distinct approach compared to traditional RAG methods [raptor, p.0].",
+      "retrieved_papers": [
+        "crag",
+        "rag_lewis",
+        "raptor"
+      ],
+      "latency": 5.13,
+      "retrieval_hit": true,
+      "coverage": 0.75,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q13",
+      "type": "comparison",
+      "dev": false,
+      "answer": "CRAG differs from conventional RAG by implementing a lightweight retrieval evaluator to assess the quality of retrieved documents and returning a confidence degree to trigger different knowledge retrieval actions. Additionally, CRAG utilizes large-scale web searches to augment retrieval results and employs a decompose-then-recompose algorithm to focus on key information while filtering out irrelevant content. This approach enhances the robustness and performance of RAG-based methods, making CRAG adaptable and effective across various generation tasks [crag, p.0].",
+      "retrieved_papers": [
+        "crag"
+      ],
+      "latency": 6.68,
+      "retrieval_hit": true,
+      "coverage": 0.75,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q13",
+      "type": "comparison",
+      "dev": false,
+      "answer": "CRAG differs from conventional RAG by implementing a plug-and-play method that enhances the ability of automatic self-correction and efficient utilization of retrieved documents. It also addresses scenarios where the retriever returns inaccurate results, making corrective strategies for RAG to improve its robustness. Additionally, CRAG has shown significant performance improvements over standard RAG and state-of-the-art Self-RAG across various datasets, demonstrating its generalizability in both short- and long-form generation tasks [crag, p.1].",
+      "retrieved_papers": [
+        "crag",
+        "rag_lewis"
+      ],
+      "latency": 4.85,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q14",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "dpo",
+        "rag_lewis"
+      ],
+      "latency": 4.77,
+      "abstained": true,
+      "run": 0
+    },
+    {
+      "id": "q14",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "dpo",
+        "rag_lewis"
+      ],
+      "latency": 2.57,
+      "abstained": true,
+      "run": 1
+    },
+    {
+      "id": "q15",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench",
+        "rag_lewis",
+        "self_rag"
+      ],
+      "latency": 4.2,
+      "abstained": true,
+      "run": 0
+    },
+    {
+      "id": "q15",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench",
+        "rag_lewis",
+        "self_rag"
+      ],
+      "latency": 2.67,
+      "abstained": true,
+      "run": 1
+    },
+    {
+      "id": "q16",
+      "type": "conceptual",
+      "dev": true,
+      "answer": "QLoRA introduces several innovations to reduce memory usage without sacrificing performance, including (a) 4-bit NormalFloat (NF4), a new data type that is information theoretically optimal for normally distributed weights, and (b) the use of Low Rank Adapters (LoRA) to backpropagate gradients through a frozen, 4-bit quantized pretrained language model [qlora, p.0].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 4.37,
+      "retrieval_hit": true,
+      "coverage": 0.3333333333333333,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q16",
+      "type": "conceptual",
+      "dev": true,
+      "answer": "QLoRA introduces several innovations to reduce memory usage without sacrificing performance: (1) 4-bit NormalFloat (NF4), a new data type that is information theoretically optimal for normally distributed weights; (2) Double Quantization, a method that quantizes the quantization constants, saving an average of about 0.37 bits per parameter; and (3) Paged Optimizers, which use NVIDIA unified memory to avoid memory spikes during gradient checkpointing. These contributions are combined into a better-tuned LoRA approach that includes adapters at every network layer, minimizing accuracy tradeoffs seen in prior work [qlora, p.1].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 6.01,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    }
+  ],
+  "mq_crag": [
+    {
+      "id": "q01",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The authors propose using state-of-the-art LLMs, such as GPT-4, to automate the evaluation of chat assistants. They expect this approach to work because it can scale the evaluation process and address the limitations of human ratings, which are slow and costly. By leveraging LLMs, they aim to create a more efficient and scalable method for assessing alignment with human preferences [llm_as_judge_mtbench, p.1].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 8.07,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q01",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The authors propose the \"LLM-as-a-judge\" approach to automate the human evaluation of chat assistants. They expect it to work because strong LLMs, such as GPT-4, can achieve an agreement rate of over 80% with human experts, which is comparable to the level of agreement among human evaluators. This suggests that LLMs can effectively align with human preferences in evaluating chatbot performance [llm_as_judge_mtbench, p.9].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 7.4,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q02",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The main advantages of LLM-as-a-judge include its ability to achieve an agreement rate of over 80% with human preferences, making it a scalable and explainable method to evaluate human preferences, which are otherwise costly to obtain. Additionally, it complements traditional benchmarks by evaluating various models and can swiftly and automatically assess both core capabilities and human alignment of models [llm_as_judge_mtbench, p.0].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 8.29,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q02",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The main advantages of LLM-as-a-judge include its ability to achieve an agreement rate of over 80% with human preferences, making it a scalable and explainable method to evaluate human preferences, which are otherwise costly to obtain. Additionally, it complements traditional benchmarks by evaluating various models effectively and allows for a hybrid evaluation framework that combines capability-based and preference-based assessments [llm_as_judge_mtbench, p.0].",
+      "retrieved_papers": [
+        "llm_as_judge_mtbench"
+      ],
+      "latency": 9.52,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q03",
+      "type": "factual",
+      "dev": false,
+      "answer": "RAPTOR uses a clustering algorithm based on Gaussian Mixture Models (GMMs) to group text segments into cohesive groups [raptor, p.2].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 6.95,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q03",
+      "type": "factual",
+      "dev": false,
+      "answer": "RAPTOR uses a clustering algorithm based on Gaussian Mixture Models (GMMs) to group text segments into cohesive groups [raptor, p.2].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 6.69,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q04",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "lora"
+      ],
+      "latency": 8.3,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": true,
+      "run": 0
+    },
+    {
+      "id": "q04",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "The update to a pre-trained weight matrix is represented as ∆W, which refers to its accumulated gradient update during adaptation. The low-rank matrices are injected into the model, and their rank can be very low (i.e., r can be one or two), which is sufficient even when the full rank is high (i.e., d can be as high as 12,288) [lora, p.1].",
+      "retrieved_papers": [
+        "lora"
+      ],
+      "latency": 8.73,
+      "retrieval_hit": true,
+      "coverage": 0,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q05",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "HyDE decomposes dense retrieval into two tasks: natural language understanding (NLU) and natural language generation (NLG). The retrieval task is cast in such a way that the query-document similarity score is no longer explicitly modeled or computed. Instead, it uses a generative model to produce an intermediate hypothetical document, which is then fed into a dense encoder to retrieve the most similar real documents based on vector similarity [hyde, p.1].",
+      "retrieved_papers": [
+        "hyde"
+      ],
+      "latency": 6.04,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q05",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "HyDE decomposes dense retrieval into two tasks: natural language understanding (NLU) and natural language generation (NLG). The retrieval task is cast in such a way that the query-document similarity score is no longer explicitly modeled or computed. Instead, it uses a generative model to produce an intermediate hypothetical document, which is then fed into a dense encoder to retrieve the most similar real documents based on vector similarity [hyde, p.1].",
+      "retrieved_papers": [
+        "hyde"
+      ],
+      "latency": 7.95,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q06",
+      "type": "factual",
+      "dev": false,
+      "answer": "The question-answering datasets used to evaluate RAPTOR are NarrativeQA, QASPER, and QuALITY [raptor, p.5].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 7.6,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q06",
+      "type": "factual",
+      "dev": false,
+      "answer": "The question-answering datasets used to evaluate RAPTOR are NarrativeQA, QASPER, and QuALITY [raptor, p.5].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 7.69,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q07",
+      "type": "factual",
+      "dev": false,
+      "answer": "I couldn't find relevant information about this in the papers I have access to.",
+      "retrieved_papers": [],
+      "latency": 14.75,
+      "retrieval_hit": false,
+      "coverage": 0,
+      "false_refusal": true,
+      "run": 0
+    },
+    {
+      "id": "q07",
+      "type": "factual",
+      "dev": false,
+      "answer": "I couldn't find relevant information about this in the papers I have access to.",
+      "retrieved_papers": [],
+      "latency": 13.78,
+      "retrieval_hit": false,
+      "coverage": 0,
+      "false_refusal": true,
+      "run": 1
+    },
+    {
+      "id": "q08",
+      "type": "factual",
+      "dev": false,
+      "answer": "QLoRA's double quantization saves an average of about 0.37 bits per parameter [qlora, p.1].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 7.21,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q08",
+      "type": "factual",
+      "dev": false,
+      "answer": "QLoRA's double quantization saves an average of about 0.37 bits per parameter [qlora, p.1].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 6.09,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q09",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "Self-RAG introduces special tokens called reflection tokens. These tokens are used to evaluate the model's own predictions after each generated segment, enabling a soft re-ranking mechanism or hard constraints during inference. They allow the model to tailor its behavior to diverse task requirements and enhance overall generation quality, factuality, and verifiability [self_rag, p.5].",
+      "retrieved_papers": [
+        "self_rag"
+      ],
+      "latency": 9.71,
+      "retrieval_hit": true,
+      "coverage": 0.3333333333333333,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q09",
+      "type": "conceptual",
+      "dev": false,
+      "answer": "Self-RAG introduces special tokens called reflection tokens. These tokens are used to enable the model to evaluate its own predictions after each generated segment, allowing for a soft re-ranking mechanism or hard constraints at inference. They also help the model determine whether factual grounding is necessary for the continuation of the generation and tailor its behavior to diverse task requirements during the inference phase [self_rag, p.5][self_rag, p.16].",
+      "retrieved_papers": [
+        "self_rag"
+      ],
+      "latency": 10.23,
+      "retrieval_hit": true,
+      "coverage": 0.3333333333333333,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q10",
+      "type": "comparison",
+      "dev": true,
+      "answer": "DPO differs from the PPO-based RLHF pipeline used in InstructGPT by bypassing the need to fit an explicit reward and perform reinforcement learning (RL) to learn the policy. Instead, DPO learns the policy using a single maximum likelihood objective, which allows for the exact recovery of the optimal policy without the constraints associated with traditional reward models [dpo, p.4]. Additionally, DPO's reward/KL tradeoff strictly dominates that of PPO, and it achieves better performance even when PPO has access to ground truth rewards [dpo, p.8].",
+      "retrieved_papers": [
+        "dpo"
+      ],
+      "latency": 7.71,
+      "retrieval_hit": true,
+      "coverage": 0.25,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q10",
+      "type": "comparison",
+      "dev": true,
+      "answer": "DPO is able to bypass both fitting an explicit reward and performing reinforcement learning (RL) to learn the policy using a single maximum likelihood objective, whereas PPO requires an explicit reward function and RL to optimize the policy. This allows DPO to reduce the complexity associated with training language models from human preferences compared to the PPO-based RLHF pipeline used in InstructGPT [dpo, p.4].",
+      "retrieved_papers": [
+        "dpo"
+      ],
+      "latency": 9.18,
+      "retrieval_hit": true,
+      "coverage": 0.75,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q11",
+      "type": "comparison",
+      "dev": false,
+      "answer": "Self-RAG differs from conventional RAG by enabling retrieval on demand and selection of the best possible model output via fine-grained self-reflection, making it more robust and controllable. Unlike conventional RAG, which may rely on external models at inference, Self-RAG processes passages in parallel and filters out irrelevant ones through self-reflection, also evaluating aspects of model output quality including factuality [self_rag, p.2].",
+      "retrieved_papers": [
+        "crag",
+        "self_rag"
+      ],
+      "latency": 6.17,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q11",
+      "type": "comparison",
+      "dev": false,
+      "answer": "Self-RAG differs from conventional RAG in that it enables retrieval on demand and selection of the best possible model output via fine-grained self-reflection, making it more robust and controllable. Unlike conventional RAG, which may rely on external models at inference, Self-RAG processes passages in parallel and filters out irrelevant ones through self-reflection, also evaluating aspects of model output quality including factuality [self_rag, p.2].",
+      "retrieved_papers": [
+        "crag",
+        "self_rag"
+      ],
+      "latency": 8.08,
+      "retrieval_hit": true,
+      "coverage": 0.6666666666666666,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q12",
+      "type": "comparison",
+      "dev": false,
+      "answer": "RAPTOR differs from traditional RAG in that it builds a recursive tree structure that balances broader thematic comprehension with granular details, allowing nodes to be grouped based on semantic similarity rather than just their order in the text. This structure enables RAPTOR to capture both high-level and low-level details about a text, which is not typically addressed in traditional retrieval augmentation techniques [raptor, p.2]. Additionally, RAPTOR segments the retrieval corpus into short, contiguous texts and preserves contextual coherence by ensuring that sentences are not cut mid-sentence, which enhances the semantic integrity of the chunks used for retrieval [raptor, p.2].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 16.39,
+      "retrieval_hit": true,
+      "coverage": 0.25,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q12",
+      "type": "comparison",
+      "dev": false,
+      "answer": "RAPTOR differs from traditional RAG in that it builds a recursive tree structure that balances broader thematic comprehension with granular details, allowing nodes to be grouped based on semantic similarity rather than just their order in the text. This structure enables RAPTOR to capture both high-level and low-level details about a text, which is not typically addressed in traditional retrieval augmentation techniques [raptor, p.2]. Additionally, RAPTOR segments the retrieval corpus into short, contiguous texts of length 100 and preserves contextual coherence by moving entire sentences to the next chunk if they exceed this limit, which is a more nuanced approach compared to traditional methods [raptor, p.2].",
+      "retrieved_papers": [
+        "raptor"
+      ],
+      "latency": 10.02,
+      "retrieval_hit": true,
+      "coverage": 0.75,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q13",
+      "type": "comparison",
+      "dev": false,
+      "answer": "CRAG differs from conventional RAG by implementing a lightweight retrieval evaluator to assess the quality of retrieved documents and returning a confidence degree to trigger different knowledge retrieval actions. It also utilizes large-scale web searches to augment retrieval results, whereas conventional RAG may rely on static and limited corpora. Additionally, CRAG employs a decompose-then-recompose algorithm to selectively focus on key information and filter out irrelevant content, enhancing the utilization of retrieved data. CRAG is designed to be plug-and-play, allowing it to be seamlessly integrated with various RAG-based approaches, which is not a characteristic of conventional RAG [crag, p.0].",
+      "retrieved_papers": [
+        "crag"
+      ],
+      "latency": 6.85,
+      "retrieval_hit": true,
+      "coverage": 0.75,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q13",
+      "type": "comparison",
+      "dev": false,
+      "answer": "CRAG differs from conventional RAG by implementing a lightweight retrieval evaluator to assess the quality of retrieved documents and returning a confidence degree to trigger different knowledge retrieval actions. It also utilizes large-scale web searches to augment retrieval results, and employs a decompose-then-recompose algorithm to selectively focus on key information while filtering out irrelevant content. Additionally, CRAG is designed to be plug-and-play, allowing it to be seamlessly integrated with various RAG-based approaches, which enhances its adaptability and performance across different tasks [crag, p.0].",
+      "retrieved_papers": [
+        "crag"
+      ],
+      "latency": 9.36,
+      "retrieval_hit": true,
+      "coverage": 0.5,
+      "false_refusal": false,
+      "run": 1
+    },
+    {
+      "id": "q14",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "dpo"
+      ],
+      "latency": 8.2,
+      "abstained": true,
+      "run": 0
+    },
+    {
+      "id": "q14",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I don't know.",
+      "retrieved_papers": [
+        "dpo"
+      ],
+      "latency": 9.75,
+      "abstained": true,
+      "run": 1
+    },
+    {
+      "id": "q15",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I couldn't find relevant information about this in the papers I have access to.",
+      "retrieved_papers": [],
+      "latency": 17.42,
+      "abstained": true,
+      "run": 0
+    },
+    {
+      "id": "q15",
+      "type": "unanswerable",
+      "dev": false,
+      "answer": "I couldn't find relevant information about this in the papers I have access to.",
+      "retrieved_papers": [],
+      "latency": 11.25,
+      "abstained": true,
+      "run": 1
+    },
+    {
+      "id": "q16",
+      "type": "conceptual",
+      "dev": true,
+      "answer": "QLoRA introduces several innovations to reduce memory usage without sacrificing performance: (1) 4-bit NormalFloat (NF4), a new data type that is information theoretically optimal for normally distributed weights; (2) Double Quantization, which quantizes the quantization constants, saving an average of about 0.37 bits per parameter; and (3) Paged Optimizers, which use NVIDIA unified memory to avoid memory spikes during gradient checkpointing when processing long sequence lengths [qlora, p.1].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 6.76,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 0
+    },
+    {
+      "id": "q16",
+      "type": "conceptual",
+      "dev": true,
+      "answer": "QLoRA introduces several innovations to reduce memory usage without sacrificing performance: (a) 4-bit NormalFloat (NF4), a new data type that is information theoretically optimal for normally distributed weights; (b) Double Quantization, which quantizes the quantization constants, saving an average of about 0.37 bits per parameter; and (c) Paged Optimizers, which use NVIDIA unified memory to avoid memory spikes during gradient checkpointing when processing long sequence lengths [qlora, p.1].",
+      "retrieved_papers": [
+        "qlora"
+      ],
+      "latency": 9.69,
+      "retrieval_hit": true,
+      "coverage": 1,
+      "false_refusal": false,
+      "run": 1
+    }
+  ]
+}
