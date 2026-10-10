@@ -1,11 +1,14 @@
 """Step 5: evaluate three RAG configurations on questions.json.
 
 Metrics per answerable question:
-  - retrieval_hit : at least one required source among the chunks passed to the answer step
-  - coverage      : fraction of key points the answer covers (LLM judge, one yes/no per key point)
-  - false_refusal : the system declined to answer a question that is answerable
+  - retrieval_hit    : at least one required source paper among the chunks passed to the answer step
+  - evidence_hit_pre : an evidence snippet appears in the chunks retrieved BEFORE CRAG grading
+  - evidence_hit     : an evidence snippet appears in the chunks passed to the answer step
+                       (pre=True, hit=False means the CRAG grader dropped the right chunk)
+  - coverage         : fraction of key points the answer covers (LLM judge, one yes/no per key point)
+  - false_refusal    : the system declined to answer a question that is answerable
 Metric per unanswerable question:
-  - abstained     : the system declined instead of making up an answer
+  - abstained        : the system declined instead of making up an answer
 Also: latency per question.
 
 Each question is run N_RUNS times per config, because the pipeline is not deterministic.
@@ -25,6 +28,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
 from rag_graph import build_graph
+from check_questions import normalize
 
 QUESTIONS_FILE = Path("questions.json")
 RESULTS_FILE = Path("results/eval_results.json")
@@ -84,19 +88,32 @@ def declined(question: str, answer: str) -> bool:
 
 
 # ---------- 2) Run one question once ----------
+def evidence_found(docs, evidence: list[str]):
+    """True if any evidence snippet appears in the text of the given chunks."""
+    if not evidence:
+        return None
+    text = normalize(" ".join(d.page_content for d in docs))
+    return any(normalize(snippet) in text for snippet in evidence)
+
+
 def run_once(graph, q: dict) -> dict:
     start = time.time()
     result = graph.invoke({"question": q["question"]})
     latency = time.time() - start
 
     answer = result["answer"]
-    retrieved_papers = sorted({d.metadata["paper"] for d in result.get("documents", [])})
+    final_docs = result.get("documents", [])
+    # Graphs without CRAG have no grading step, so "before grading" is the same as the final list
+    pre_docs = result.get("retrieved_documents", final_docs)
+    retrieved_papers = sorted({d.metadata["paper"] for d in final_docs})
+
     record = {
         "id": q["id"],
         "type": q["type"],
         "dev": q.get("dev", False),
         "answer": answer,
         "retrieved_papers": retrieved_papers,
+        "retrieved_chunks": [f"{d.metadata['paper']} p.{d.metadata['page']}" for d in final_docs],
         "latency": round(latency, 2),
     }
 
@@ -104,39 +121,50 @@ def run_once(graph, q: dict) -> dict:
         record["abstained"] = declined(q["question"], answer)
     else:
         record["retrieval_hit"] = any(paper in retrieved_papers for paper in q["required_sources"])
+        record["evidence_hit_pre"] = evidence_found(pre_docs, q["evidence"])   # retrieved at all?
+        record["evidence_hit"] = evidence_found(final_docs, q["evidence"])     # reached the answer step?
         record["coverage"] = coverage(q["question"], answer, q["key_points"])
         record["false_refusal"] = declined(q["question"], answer)
     return record
 
 
 # ---------- 3) Summaries ----------
+
+METRICS = ["retrieval_hit", "evidence_hit_pre", "evidence_hit", "coverage", "false_refusal", "abstained", "latency"]
+
+
 def summarize(records: list[dict]) -> dict:
-    if not records:                      # e.g. no questions of this type in the current subset
-        return {k: None for k in ["retrieval_hit", "coverage", "false_refusal", "abstained", "latency"]}
+    if not records:
+        return {k: None for k in METRICS}
     answerable = [r for r in records if r["type"] != "unanswerable"]
     unanswerable = [r for r in records if r["type"] == "unanswerable"]
-    summary = {
-        "retrieval_hit": mean(r["retrieval_hit"] for r in answerable) if answerable else None,
-        "coverage":      mean(r["coverage"] for r in answerable) if answerable else None,
-        "false_refusal": mean(r["false_refusal"] for r in answerable) if answerable else None,
-        "abstained":     mean(r["abstained"] for r in unanswerable) if unanswerable else None,
-        "latency":       mean(r["latency"] for r in records),
+
+    def avg(rows, key):
+        values = [r[key] for r in rows if r.get(key) is not None]
+        return round(mean(values), 3) if values else None
+
+    return {
+        "retrieval_hit":    avg(answerable, "retrieval_hit"),
+        "evidence_hit_pre": avg(answerable, "evidence_hit_pre"),
+        "evidence_hit":     avg(answerable, "evidence_hit"),
+        "coverage":         avg(answerable, "coverage"),
+        "false_refusal":    avg(answerable, "false_refusal"),
+        "abstained":        avg(unanswerable, "abstained"),
+        "latency":          avg(records, "latency"),
     }
-    return {k: (round(v, 3) if v is not None else None) for k, v in summary.items()}
 
 
 def print_table(title: str, rows: dict[str, dict]):
-    cols = ["retrieval_hit", "coverage", "false_refusal", "abstained", "latency"]
     print(f"\n{title}")
-    print(f"{'config':<14}" + "".join(f"{c:>15}" for c in cols))
+    print(f"{'config':<14}" + "".join(f"{c:>18}" for c in METRICS))
     for name, s in rows.items():
-        print(f"{name:<14}" + "".join(f"{str(s[c]):>15}" for c in cols))
+        print(f"{name:<14}" + "".join(f"{str(s[c]):>18}" for c in METRICS))
 
 
 # ---------- 4) Main ----------
 def main():
     questions = json.loads(QUESTIONS_FILE.read_text())
-    #questions = [q for q in questions if q["id"] in ("q03", "q13", "q14")]   # TEMP: smoke test
+    #questions = [q for q in questions if q["id"] in ("q03", "q04", "q07")]   # TEMP: smoke test
     all_records = {}
 
     for name, kwargs in CONFIGS.items():

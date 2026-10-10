@@ -1,0 +1,106 @@
+{
+  "per_question": [
+    {
+      "id": "q01",
+      "type": "conceptual",
+      "dev": false,
+      "rank": 29
+    },
+    {
+      "id": "q02",
+      "type": "conceptual",
+      "dev": false,
+      "rank": 6
+    },
+    {
+      "id": "q03",
+      "type": "factual",
+      "dev": false,
+      "rank": 1
+    },
+    {
+      "id": "q04",
+      "type": "conceptual",
+      "dev": false,
+      "rank": 6
+    },
+    {
+      "id": "q05",
+      "type": "conceptual",
+      "dev": false,
+      "rank": 5
+    },
+    {
+      "id": "q06",
+      "type": "factual",
+      "dev": false,
+      "rank": 1
+    },
+    {
+      "id": "q07",
+      "type": "factual",
+      "dev": false,
+      "rank": null
+    },
+    {
+      "id": "q08",
+      "type": "factual",
+      "dev": false,
+      "rank": 4
+    },
+    {
+      "id": "q09",
+      "type": "conceptual",
+      "dev": false,
+      "rank": null
+    },
+    {
+      "id": "q10",
+      "type": "comparison",
+      "dev": true,
+      "rank": 15
+    },
+    {
+      "id": "q11",
+      "type": "comparison",
+      "dev": false,
+      "rank": 4
+    },
+    {
+      "id": "q12",
+      "type": "comparison",
+      "dev": false,
+      "rank": 3
+    },
+    {
+      "id": "q13",
+      "type": "comparison",
+      "dev": false,
+      "rank": 14
+    },
+    {
+      "id": "q16",
+      "type": "conceptual",
+      "dev": true,
+      "rank": 23
+    }
+  ],
+  "curves": {
+    "all": {
+      "recall@1": 0.143,
+      "recall@3": 0.214,
+      "recall@5": 0.429,
+      "recall@10": 0.571,
+      "recall@20": 0.714,
+      "recall@30": 0.857
+    },
+    "held_out": {
+      "recall@1": 0.167,
+      "recall@3": 0.25,
+      "recall@5": 0.5,
+      "recall@10": 0.667,
+      "recall@20": 0.75,
+      "recall@30": 0.833
+    }
+  }
+}

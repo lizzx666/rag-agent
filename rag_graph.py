@@ -15,10 +15,11 @@ from index import get_vectorstore   # reuse the same store and embedding setting
 # ---------- 1) State ----------
 class RAGState(TypedDict):
     question: str               # the user's original question (never changes)
-    search_query: str           # NEW: the query actually used for retrieval (CRAG may rewrite it)
+    search_query: str           # the query actually used for retrieval (CRAG may rewrite it)
     queries: list[str]          # rewritten search queries (multi-query version only)
-    documents: list[Document]
-    rewrite_count: int          # NEW: how many times CRAG has rewritten the query
+    documents: list[Document]   # chunks passed to the answer step
+    retrieved_documents: list[Document]   # NEW: chunks retrieved before CRAG grading (for evaluation)
+    rewrite_count: int
     answer: str
 
 
@@ -152,7 +153,8 @@ def grade_documents(state: RAGState):
     relevant = [d for d, g in zip(docs, grades) if g.relevant == "yes"]
     dropped = [f"{d.metadata['paper']} p.{d.metadata['page']}" for d, g in zip(docs, grades) if g.relevant == "no"]
     print(f"  [grade] kept {len(relevant)}/{len(docs)} chunks, dropped: {dropped}")
-    return {"documents": relevant}
+    # keep the unfiltered list too, so the evaluation can tell "never retrieved" from "dropped by the grader"
+    return {"documents": relevant, "retrieved_documents": docs}
 
 
 def rewrite_question(state: RAGState):

@@ -53,7 +53,11 @@
     ],
     "required_sources": ["lora"],
     "optional_sources": [],
-    "evidence": ["We use a random Gaussian initialization for A"],
+    "evidence": [
+      "we constrain its update by representing the latter with a low-rank decomposition",
+      "is frozen and does not receive gradient updates",
+      "We use a random Gaussian initialization for A"
+    ],
     "type": "conceptual",
     "dev": false
   },
@@ -67,7 +71,11 @@
     ],
     "required_sources": ["hyde"],
     "optional_sources": [],
-    "evidence": ["decompose dense retrieval into two tasks"],
+    "evidence": [
+      "decompose dense retrieval into two tasks",
+      "zero-shot instructs an instruction-following language model",
+      "encodes the document into an embedding vector"
+    ],
     "type": "conceptual",
     "dev": false
   },
