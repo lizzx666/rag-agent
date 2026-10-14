@@ -4,89 +4,103 @@
       "id": "q01",
       "type": "conceptual",
       "dev": false,
-      "rank": 29
+      "rank_before": 29,
+      "rank_after": null
     },
     {
       "id": "q02",
       "type": "conceptual",
       "dev": false,
-      "rank": 6
+      "rank_before": 6,
+      "rank_after": 3
     },
     {
       "id": "q03",
       "type": "factual",
       "dev": false,
-      "rank": 1
+      "rank_before": 1,
+      "rank_after": 3
     },
     {
       "id": "q04",
       "type": "conceptual",
       "dev": false,
-      "rank": 6
+      "rank_before": 6,
+      "rank_after": 2
     },
     {
       "id": "q05",
       "type": "conceptual",
       "dev": false,
-      "rank": 5
+      "rank_before": 5,
+      "rank_after": 2
     },
     {
       "id": "q06",
       "type": "factual",
       "dev": false,
-      "rank": 1
+      "rank_before": 1,
+      "rank_after": 1
     },
     {
       "id": "q07",
       "type": "factual",
       "dev": false,
-      "rank": null
+      "rank_before": null,
+      "rank_after": null
     },
     {
       "id": "q08",
       "type": "factual",
       "dev": false,
-      "rank": 4
+      "rank_before": 4,
+      "rank_after": 1
     },
     {
       "id": "q09",
       "type": "conceptual",
       "dev": false,
-      "rank": null
+      "rank_before": null,
+      "rank_after": null
     },
     {
       "id": "q10",
       "type": "comparison",
       "dev": true,
-      "rank": 15
+      "rank_before": 15,
+      "rank_after": 6
     },
     {
       "id": "q11",
       "type": "comparison",
       "dev": false,
-      "rank": 4
+      "rank_before": 4,
+      "rank_after": 1
     },
     {
       "id": "q12",
       "type": "comparison",
       "dev": false,
-      "rank": 3
+      "rank_before": 3,
+      "rank_after": 4
     },
     {
       "id": "q13",
       "type": "comparison",
       "dev": false,
-      "rank": 14
+      "rank_before": 14,
+      "rank_after": 1
     },
     {
       "id": "q16",
       "type": "conceptual",
       "dev": true,
-      "rank": 23
+      "rank_before": 23,
+      "rank_after": null
     }
   ],
   "curves": {
-    "all": {
+    "all_before": {
       "recall@1": 0.143,
       "recall@3": 0.214,
       "recall@5": 0.429,
@@ -94,13 +108,27 @@
       "recall@20": 0.714,
       "recall@30": 0.857
     },
-    "held_out": {
+    "all_after": {
+      "recall@1": 0.286,
+      "recall@3": 0.571,
+      "recall@5": 0.643,
+      "recall@10": 0.714,
+      "recall@20": 0.714
+    },
+    "held_out_before": {
       "recall@1": 0.167,
       "recall@3": 0.25,
       "recall@5": 0.5,
       "recall@10": 0.667,
       "recall@20": 0.75,
       "recall@30": 0.833
+    },
+    "held_out_after": {
+      "recall@1": 0.333,
+      "recall@3": 0.667,
+      "recall@5": 0.75,
+      "recall@10": 0.75,
+      "recall@20": 0.75
     }
   }
 }

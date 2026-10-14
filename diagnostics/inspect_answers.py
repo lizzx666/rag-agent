@@ -3,8 +3,8 @@ import json
 from pathlib import Path
 
 RESULTS_FILE = Path("results/eval_results.json")
-CONFIG = "baseline"
-IDS = ["q05", "q09"]
+CONFIG = "rerank"
+IDS = ["q10", "q11"]
 RUN = 0
 
 records = json.loads(RESULTS_FILE.read_text())[CONFIG]

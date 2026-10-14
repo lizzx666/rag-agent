@@ -12,3 +12,4 @@ wheels/
 .venv
 data/*.pdf
 chroma_db/
+.DS_Store

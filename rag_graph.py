@@ -10,6 +10,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, START, END
 
 from index import get_vectorstore   # reuse the same store and embedding settings as step 1
+from rerank import rerank, get_reranker   # NEW
 
 
 # ---------- 1) State ----------
@@ -18,22 +19,25 @@ class RAGState(TypedDict):
     search_query: str           # the query actually used for retrieval (CRAG may rewrite it)
     queries: list[str]          # rewritten search queries (multi-query version only)
     documents: list[Document]   # chunks passed to the answer step
-    retrieved_documents: list[Document]   # NEW: chunks retrieved before CRAG grading (for evaluation)
+    retrieved_documents: list[Document]   # chunks before any filtering step (CRAG grading or reranking), for evaluation
     rewrite_count: int
     answer: str
 
 
 # ---------- 2) Retriever, model, limits ----------
 vectorstore = get_vectorstore()
-retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
+
+TOP_N = 5          # chunks passed to the answer step
+CANDIDATES = 20    # NEW: chunks retrieved for the reranker to reorder (fixed in advance, not tuned)
+MAX_REWRITES = 1   # CRAG may rewrite the query at most this many times before giving up
+
+retriever = vectorstore.as_retriever(search_kwargs={"k": TOP_N})
+candidate_retriever = vectorstore.as_retriever(search_kwargs={"k": CANDIDATES})   # NEW
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, timeout=60, max_retries=2)
 
-TOP_N = 5          # chunks passed to the answer step
-MAX_REWRITES = 1   # NEW: CRAG may rewrite the query at most this many times before giving up
 
-
-# ---------- 3) Answer generation (unchanged) ----------
+# ---------- 3) Answer generation ----------
 def format_docs(docs: list[Document]) -> str:
     """Join chunks into one context string, each labelled with its source."""
     parts = []
@@ -55,7 +59,7 @@ ANSWER_PROMPT = ChatPromptTemplate.from_template(
 answer_chain = ANSWER_PROMPT | llm | StrOutputParser()
 
 
-# ---------- 4) Multi-query generation (unchanged) ----------
+# ---------- 4) Multi-query generation ----------
 class SearchQueries(BaseModel):
     queries: list[str] = Field(description="Alternative search queries for a vector database of research papers")
 
@@ -71,7 +75,7 @@ QUERY_PROMPT = ChatPromptTemplate.from_template(
 query_chain = QUERY_PROMPT | llm.with_structured_output(SearchQueries)
 
 
-# ---------- 5) Reciprocal Rank Fusion (unchanged) ----------
+# ---------- 5) Reciprocal Rank Fusion ----------
 def doc_key(doc: Document) -> str:
     """A unique id for a chunk: which paper, which page, and where on the page it starts."""
     m = doc.metadata
@@ -93,7 +97,7 @@ def reciprocal_rank_fusion(results: list[list[Document]], k: int = 60, top_n: in
     return [docs_by_key[key] for key in ranked_keys[:top_n]]
 
 
-# ---------- 6) CRAG: grader and rewriter (NEW) ----------
+# ---------- 6) CRAG: grader and rewriter ----------
 class GradeDocument(BaseModel):
     relevant: Literal["yes", "no"] = Field(
         description="'yes' if the passage helps answer the question, otherwise 'no'"
@@ -135,6 +139,19 @@ def retrieve(state: RAGState):
     return {"documents": retriever.invoke(current_query(state))}
 
 
+def retrieve_candidates(state: RAGState):
+    """NEW: one search with a larger k, so the reranker has more chunks to choose from."""
+    return {"documents": candidate_retriever.invoke(current_query(state))}
+
+
+def rerank_documents(state: RAGState):
+    """NEW: reorder the candidates with the cross-encoder and keep the best TOP_N."""
+    candidates = state["documents"]
+    reranked = rerank(state["question"], candidates, top_n=TOP_N)
+    # keep the candidates too, so the evaluation can tell "not among the candidates" from "not ranked high enough"
+    return {"documents": reranked, "retrieved_documents": candidates}
+
+
 def generate_queries(state: RAGState):
     q = current_query(state)
     generated = query_chain.invoke({"question": q, "n": 4})
@@ -158,7 +175,7 @@ def grade_documents(state: RAGState):
 
 
 def rewrite_question(state: RAGState):
-    rewritten = rewrite_chain.invoke({"question": state["question"], "search_query": current_query(state)})   
+    rewritten = rewrite_chain.invoke({"question": state["question"], "search_query": current_query(state)})
     new_query = rewritten.strip()
     print(f"  [rewrite] new search query: {new_query}")
     return {"search_query": new_query, "rewrite_count": state.get("rewrite_count", 0) + 1}
@@ -185,11 +202,19 @@ def route_after_grading(state: RAGState) -> str:
 
 
 # ---------- 9) Graph ----------
-def build_graph(multi_query: bool, crag: bool = False):
+def build_graph(multi_query: bool, crag: bool = False, use_rerank: bool = False):
+    if use_rerank and (multi_query or crag):
+        raise ValueError("use_rerank is only supported on top of the baseline (multi_query=False, crag=False)")
+
     builder = StateGraph(RAGState)
 
     # Nodes
-    builder.add_node("retrieve", retrieve_fused if multi_query else retrieve)
+    if use_rerank:
+        builder.add_node("retrieve", retrieve_candidates)
+        builder.add_node("rerank", rerank_documents)
+        get_reranker()   # load the model now, so loading time is not counted as latency of the first question
+    else:
+        builder.add_node("retrieve", retrieve_fused if multi_query else retrieve)
     builder.add_node("generate", generate)
     if multi_query:
         builder.add_node("generate_queries", generate_queries)
@@ -209,9 +234,11 @@ def build_graph(multi_query: bool, crag: bool = False):
         builder.add_conditional_edges(
             "grade_documents", route_after_grading, ["generate", "rewrite_question", "no_answer"]
         )
-        # TODO: after rewriting, start a new search: rewrite_question -> search_start
         builder.add_edge("rewrite_question", search_start)
         builder.add_edge("no_answer", END)
+    elif use_rerank:
+        builder.add_edge("retrieve", "rerank")
+        builder.add_edge("rerank", "generate")
     else:
         builder.add_edge("retrieve", "generate")
     builder.add_edge("generate", END)
@@ -221,18 +248,16 @@ def build_graph(multi_query: bool, crag: bool = False):
 
 # ---------- 10) Run ----------
 if __name__ == "__main__":
-    crag_graph = build_graph(multi_query=True, crag=True)
+    rerank_graph = build_graph(multi_query=False, use_rerank=True)
 
     questions = [
-        "What is the capital of France?",                          # off-topic: should end in no_answer
-        "What is the difference between DPO and PPO?",
-        "How does QLoRA reduce memory usage during fine-tuning?",
+        "How does CRAG differ from conventional RAG?",                 # evidence moved from rank 14 to 1
+        "In LoRA, how is the update to a pre-trained weight matrix represented?",
     ]
     for q in questions:
         print("\n" + "=" * 80)
         print("Q:", q)
-        result = crag_graph.invoke({"question": q})
-        print("Search query used:", result.get("search_query", q))
-        print("Rewrites:", result.get("rewrite_count", 0))
+        result = rerank_graph.invoke({"question": q})
+        print("Candidates:", len(result["retrieved_documents"]))
         print("Kept chunks from:", [f"{d.metadata['paper']} p.{d.metadata['page']}" for d in result["documents"]])
         print("\nA:", result["answer"])

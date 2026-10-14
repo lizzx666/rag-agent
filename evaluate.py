@@ -2,9 +2,10 @@
 
 Metrics per answerable question:
   - retrieval_hit    : at least one required source paper among the chunks passed to the answer step
-  - evidence_hit_pre : an evidence snippet appears in the chunks retrieved BEFORE CRAG grading
+  - evidence_hit_pre : an evidence snippet appears in the chunks BEFORE any filtering step
+                       (CRAG grading, or the 20 candidates before reranking)
   - evidence_hit     : an evidence snippet appears in the chunks passed to the answer step
-                       (pre=True, hit=False means the CRAG grader dropped the right chunk)
+                       (pre=True, hit=False: the right chunk was dropped by the grader or ranked out by the reranker)
   - coverage         : fraction of key points the answer covers (LLM judge, one yes/no per key point)
   - false_refusal    : the system declined to answer a question that is answerable
 Metric per unanswerable question:
@@ -38,6 +39,7 @@ CONFIGS = {
     "baseline":    dict(multi_query=False, crag=False),
     "multi_query": dict(multi_query=True,  crag=False),
     "mq_crag":     dict(multi_query=True,  crag=True),
+    "rerank":      dict(multi_query=False, crag=False, use_rerank=True),
 }
 
 # A stronger model than the one being tested, to reduce self-preference bias
