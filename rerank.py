@@ -7,6 +7,9 @@ so we only apply it to a small candidate set from the vector search.
 from dotenv import load_dotenv
 load_dotenv()   # must run before importing sentence_transformers: HF_ENDPOINT is read at import time
 
+import logging
+logger = logging.getLogger(__name__)
+
 from langchain_core.documents import Document
 from sentence_transformers import CrossEncoder
 
@@ -18,7 +21,8 @@ _model = None   # loaded on first use, then reused (loading takes a few seconds)
 def get_reranker() -> CrossEncoder:
     global _model
     if _model is None:
-        print(f"Loading reranker {RERANK_MODEL}")
+        #print(f"Loading reranker {RERANK_MODEL}")
+        logger.info(f"Loading reranker {RERANK_MODEL}")
         _model = CrossEncoder(RERANK_MODEL)
     return _model
 

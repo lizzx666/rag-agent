@@ -2,7 +2,7 @@
 
 A question-answering system over 10 research papers on RAG and LLM post-training, built with LangGraph.
 It compares four retrieval pipelines, evaluates them with an LLM judge and evidence-level retrieval metrics,
-and traces each retrieval failure to its cause.
+traces each retrieval failure to its cause, and exposes the best pipeline to Claude as an MCP server.
 
 **Main finding:** the bottleneck was **ranking**, and a cross-encoder reranker fixed most of it.
 The baseline retriever put the evidence chunk in the top 5 for only 50% of held-out questions, but in the top 20
@@ -78,9 +78,54 @@ uv sync
 echo "OPENAI_API_KEY=sk-..." > .env      # never commit .env
 # optional, if huggingface.co is slow or blocked:
 echo "HF_ENDPOINT=https://hf-mirror.com" >> .env
+# after the reranker model has been downloaded once (first run of rerank.py), skip Hub checks on startup:
+echo "HF_HUB_OFFLINE=1" >> .env
 # put the 10 PDFs in data/
 uv run python index.py                   # builds chroma_db/ on first run
 uv run python rag_graph.py               # demo questions with the rerank pipeline
+```
+
+## Using it from Claude (MCP server)
+
+`mcp_server.py` exposes the system as a [Model Context Protocol](https://modelcontextprotocol.io) server
+(Python SDK 2.x, stdio transport), so an MCP host such as Claude Desktop or Claude Code can call it as tools.
+
+| Name | Type | What it does |
+|---|---|---|
+| `list_papers` | tool | Short names of the 10 papers (`lora`, `rag_lewis`, ...) |
+| `search_papers(query, k=5, paper=None)` | tool | Vector search for 20 candidates (optionally inside one paper), cross-encoder rerank, return the best `k` passages with `[paper, p.N]` labels. The host model reads the evidence and writes the answer |
+| `ask_papers(question)` | tool | The evaluated `rerank` pipeline end to end; returns a cited answer written by gpt-4o-mini plus the list of retrieved sources |
+| `papers://list` | resource | The paper list, for the application or user to attach as context |
+
+Design decisions:
+- **Two tools, two trade-offs.** `search_papers` lets the (stronger) host model see and cite the evidence and combine it with other tools, at the cost of ~5k characters of context. `ask_papers` is compact and is exactly the configuration measured in the evaluation, but the host only sees the final answer. The tool descriptions tell the host when to prefer each.
+- **Paper names are a filter, not part of the query.** Failure 1 above showed that "In the original RAG paper by Lewis et al., what is the Q-BLEU metric?" ranks the evidence chunk below 30. Asked "In the RAG paper by Lewis et al., what is Q-BLEU?" through Claude Desktop, Claude called `search_papers(query="Q-BLEU-1 metric question generation evaluation", paper="rag_lewis", k=5)`: following the parameter descriptions, it moved the paper into the filter and rewrote the question as keywords, and the Q-BLEU definition came back as the first passage.
+- **Bounded, validated inputs.** `k` is clamped to 1–10 to protect the host's context window. An unknown `paper` raises `ToolError`, whose message (with the valid names) is returned to the model so it can retry. Any other exception is reported by the SDK only as "Error executing tool", so internal details are not leaked to the client.
+- **Retrieved text is marked as data.** Passages are returned under a header saying they are quoted source material, not instructions, as a basic guard against prompt injection from document content.
+- **Fast startup.** MCP hosts wait a limited time for a server to start. The RAG graph and the reranker are loaded on the first tool call (`lru_cache`), and `HF_HUB_OFFLINE=1` stops the Hugging Face client from checking the Hub on every start. Startup only opens the Chroma store.
+- **Nothing on stdout.** With the stdio transport, stdout carries the JSON-RPC messages, so every module the server imports logs to stderr through `logging` instead of `print`.
+- **Paths do not depend on the working directory.** The host may start the server from any directory, so `.env`, `data/` and `chroma_db/` are resolved from each file's location.
+
+Test with the MCP Inspector:
+
+```bash
+npx @modelcontextprotocol/inspector --cli uv run mcp_server.py --method tools/list
+npx @modelcontextprotocol/inspector --cli uv run mcp_server.py --method tools/call \
+  --tool-name search_papers --tool-arg query="Q-BLEU metric" --tool-arg paper=rag_lewis --tool-arg k=3
+```
+
+Connect it to Claude Desktop by adding this to `~/Library/Application Support/Claude/claude_desktop_config.json`
+(use the full path from `which uv`, and quit and reopen Claude Desktop afterwards):
+
+```json
+{
+  "mcpServers": {
+    "paper-rag": {
+      "command": "/ABSOLUTE/PATH/TO/uv",
+      "args": ["--directory", "/ABSOLUTE/PATH/TO/rag-agent", "run", "mcp_server.py"]
+    }
+  }
+}
 ```
 
 ## Evaluation
@@ -294,6 +339,7 @@ These changes were made before the final runs reported above.
 | `index.py` | Load PDFs, split, embed, build / load the Chroma store |
 | `rerank.py` | Cross-encoder reranker shared by the graph and the Recall@k diagnostic |
 | `rag_graph.py` | LangGraph pipelines (`build_graph(multi_query, crag, use_rerank)`) |
+| `mcp_server.py` | MCP server: `list_papers`, `search_papers`, `ask_papers` tools and the `papers://list` resource |
 | `questions.json` | Evaluation questions with key points and evidence |
 | `check_questions.py` | Offline sanity checks for `questions.json` |
 | `evaluate.py` | Runs all configs, LLM judge, writes `results/eval_results.json` |

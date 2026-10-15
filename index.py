@@ -1,15 +1,24 @@
+from pathlib import Path
+
 from dotenv import load_dotenv
-load_dotenv()
+
+# Resolve every path from this file's location, not the current working directory:
+# an MCP host (e.g. Claude Desktop) may start the server from a different directory.
+PROJECT_DIR = Path(__file__).parent
+load_dotenv(PROJECT_DIR / ".env")
+
+import logging
 import time
 
-from pathlib import Path
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 
-DATA_DIR = Path("data")
-PERSIST_DIR = "chroma_db"      # the vector store is saved here, so we only embed once
+logger = logging.getLogger(__name__)   # logs go to stderr; never print() in modules used by the MCP server
+
+DATA_DIR = PROJECT_DIR / "data"
+PERSIST_DIR = PROJECT_DIR / "chroma_db"   # the vector store is saved here, so we only embed once
 COLLECTION = "papers"
 
 
@@ -24,7 +33,7 @@ def load_papers():
             # so later we can see (and filter by) which paper a chunk came from
             page.metadata["paper"] = pdf_path.stem
         docs.extend(pages)
-        print(f"Loaded {pdf_path.name}: {len(pages)} pages")
+        logger.info(f"Loaded {pdf_path.name}: {len(pages)} pages")
     return docs
 
 
@@ -32,43 +41,16 @@ def load_papers():
 def split_docs(docs):
     """Split pages into overlapping chunks."""
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,        
-        chunk_overlap=150,     
+        chunk_size=1000,
+        chunk_overlap=150,
         add_start_index=True,  # store each chunk's position in its page (useful for merging neighbours later)
     )
     splits = splitter.split_documents(docs)
-    print(f"Split into {len(splits)} chunks")
+    logger.info(f"Split into {len(splits)} chunks")
     return splits
 
 
 # ---------- 3) Build once, load afterwards ----------
-# def get_vectorstore():
-#     #embeddings = OpenAIEmbeddings(model="text-embedding-3-small", timeout=30, max_retries=2)
-#     embeddings = OpenAIEmbeddings(
-#         model="text-embedding-3-small",
-#         timeout=30,
-#         max_retries=2,
-#         chunk_size=100,   # send 100 chunks per request instead of up to 1000
-#         )
-
-#     if Path(PERSIST_DIR).exists():
-#         vectorstore = Chroma(
-#             collection_name=COLLECTION,
-#             embedding_function=embeddings,
-#             persist_directory=PERSIST_DIR,
-#         )
-#         print("Loading existing vector store")
-#         return vectorstore
-
-#     print("Building vector store (first run only)")
-#     splits = split_docs(load_papers())
-#     vectorstore = Chroma.from_documents(
-#         documents=splits,
-#         embedding=embeddings,
-#         collection_name=COLLECTION,
-#         persist_directory=PERSIST_DIR,
-#     )
-#     return vectorstore
 def get_vectorstore():
     embeddings = OpenAIEmbeddings(
         model="text-embedding-3-small",
@@ -77,16 +59,16 @@ def get_vectorstore():
         max_retries=2,
     )
 
-    if Path(PERSIST_DIR).exists():
+    if PERSIST_DIR.exists():
         vectorstore = Chroma(
             collection_name=COLLECTION,
             embedding_function=embeddings,
-            persist_directory=PERSIST_DIR,
+            persist_directory=str(PERSIST_DIR),
         )
-        print("Loading existing vector store")
+        logger.info("Loading existing vector store")
         return vectorstore
 
-    print("Building vector store (first run only)")
+    logger.info("Building vector store (first run only)")
     splits = split_docs(load_papers())
 
     # Create an empty store, then add chunks in small batches with progress output,
@@ -94,7 +76,7 @@ def get_vectorstore():
     vectorstore = Chroma(
         collection_name=COLLECTION,
         embedding_function=embeddings,
-        persist_directory=PERSIST_DIR,
+        persist_directory=str(PERSIST_DIR),
     )
     batch_size = 50
     for i in range(0, len(splits), batch_size):
@@ -102,17 +84,20 @@ def get_vectorstore():
         start = time.time()
         vectorstore.add_documents(batch)
         done = min(i + batch_size, len(splits))
-        print(f"Embedded {done}/{len(splits)} chunks ({time.time() - start:.1f}s)")
+        logger.info(f"Embedded {done}/{len(splits)} chunks ({time.time() - start:.1f}s)")
     return vectorstore
 
 
 # ---------- 4) Sanity check ----------
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+
     vectorstore = get_vectorstore()
     print("Chunks in store:", vectorstore._collection.count())
 
     test_questions = [
-        "How does QLoRA reduce memory usage during fine-tuning?",   
+        "How does QLoRA reduce memory usage during fine-tuning?",
         "What is the difference between DPO and PPO?",
         "How does HyDE improve the quality of generated answers?",
     ]

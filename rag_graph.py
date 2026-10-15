@@ -12,6 +12,9 @@ from langgraph.graph import StateGraph, START, END
 from index import get_vectorstore   # reuse the same store and embedding settings as step 1
 from rerank import rerank, get_reranker   # NEW
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 # ---------- 1) State ----------
 class RAGState(TypedDict):
@@ -169,7 +172,8 @@ def grade_documents(state: RAGState):
     grades = grade_chain.batch([{"question": state["question"], "document": d.page_content} for d in docs])
     relevant = [d for d, g in zip(docs, grades) if g.relevant == "yes"]
     dropped = [f"{d.metadata['paper']} p.{d.metadata['page']}" for d, g in zip(docs, grades) if g.relevant == "no"]
-    print(f"  [grade] kept {len(relevant)}/{len(docs)} chunks, dropped: {dropped}")
+    #print(f"  [grade] kept {len(relevant)}/{len(docs)} chunks, dropped: {dropped}")
+    logger.info(f"  [grade] kept {len(relevant)}/{len(docs)} chunks, dropped: {dropped}")
     # keep the unfiltered list too, so the evaluation can tell "never retrieved" from "dropped by the grader"
     return {"documents": relevant, "retrieved_documents": docs}
 
@@ -177,7 +181,8 @@ def grade_documents(state: RAGState):
 def rewrite_question(state: RAGState):
     rewritten = rewrite_chain.invoke({"question": state["question"], "search_query": current_query(state)})
     new_query = rewritten.strip()
-    print(f"  [rewrite] new search query: {new_query}")
+    #print(f"  [rewrite] new search query: {new_query}")
+    logger.info(f"  [rewrite] new search query: {new_query}")
     return {"search_query": new_query, "rewrite_count": state.get("rewrite_count", 0) + 1}
 
 

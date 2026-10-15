@@ -31,6 +31,10 @@ from langchain_openai import ChatOpenAI
 from rag_graph import build_graph
 from check_questions import normalize
 
+import logging
+logging.basicConfig(level=logging.INFO, format="%(message)s")   # show [grade]/[rewrite] logs (written to stderr)
+logging.getLogger("httpx").setLevel(logging.WARNING)            # hide one log line per OpenAI HTTP request
+
 QUESTIONS_FILE = Path("questions.json")
 RESULTS_FILE = Path("results/eval_results.json")
 N_RUNS = 2
