@@ -1,7 +1,7 @@
 [project]
 name = "rag-agent"
 version = "0.1.0"
-description = "Add your description here"
+description = "RAG over 10 research papers with LangGraph: evaluation, cross-encoder reranking and an MCP server"
 readme = "README.md"
 authors = [
     { name = "lizzx666", email = "shisanyue58@gmail.com" }
