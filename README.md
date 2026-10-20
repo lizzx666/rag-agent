@@ -9,7 +9,7 @@ The baseline retriever put the evidence chunk in the top 5 for only 50% of held-
 for 75%. Multi-query rewriting and CRAG-style grading only work with the top 5 chunks, so they could not reach the
 evidence ranked 6–20 and made no clear difference. Retrieving 20 candidates and reranking them with a small
 cross-encoder raised evidence hit from 0.50 to 0.75 and answer coverage from 0.62 to 0.76,
-for +0.2 s latency and no extra LLM calls.
+at the same LLM token cost as the baseline (the reranker runs locally) and well under a second of extra latency.
 
 ---
 
@@ -81,6 +81,8 @@ echo "HF_ENDPOINT=https://hf-mirror.com" >> .env
 # after the reranker model has been downloaded once (first run of rerank.py), skip Hub checks on startup:
 echo "HF_HUB_OFFLINE=1" >> .env
 # put the 10 PDFs in data/
+# optional, to trace runs to LangSmith:
+#   LANGSMITH_TRACING=true, LANGSMITH_API_KEY=..., LANGSMITH_PROJECT=rag-agent
 uv run python index.py                   # builds chroma_db/ on first run
 uv run python rag_graph.py               # demo questions with the rerank pipeline
 ```
@@ -206,6 +208,28 @@ Run-to-run noise: across three full runs, baseline held-out coverage ranged 0.55
 The rerank gain (+0.14) is about twice that range. With 12 answerable held-out questions, one question is 8.3 points
 of any rate metric, so smaller gaps between configs are not conclusive. An earlier run suggested multi-query helped
 comparison questions; it did not repeat in the latest run, so it is treated as noise.
+
+### Cost and latency (LangSmith)
+
+Every pipeline run is traced to [LangSmith](https://smith.langchain.com). `profile_configs.py` runs each config once on all
+16 questions with tags and metadata (no judge calls, so the traces contain only the pipeline), and `cost_report.py`
+aggregates the root runs per config. Measured on a 2-vCPU cloud server (Singapore), reranker on CPU:
+
+| config | LLM tokens / query | LLM cost / query | cost / 1k queries | p50 latency | mean latency |
+|---|---|---|---|---|---|
+| baseline | 1,278 | $0.00022 | $0.22 | 1.90 s | 2.04 s |
+| multi_query | 1,512 | $0.00027 | $0.27 | 2.98 s | 2.98 s |
+| mq_crag | 3,196 | $0.00054 | $0.54 | 3.99 s | 4.14 s |
+| **rerank** | **1,269** | **$0.00022** | **$0.22** | 2.64 s | 2.72 s |
+
+Combined with the quality results above:
+- **Reranking improves quality at baseline token cost.** The cross-encoder runs locally, so it adds no LLM calls; its only cost is ~0.7 s of CPU time on this server (less on a GPU or Apple Silicon).
+- **mq_crag costs 2.5x the tokens** (one grader call per retrieved chunk, plus a query rewrite when nothing passes) and roughly doubles latency, for no quality gain on this question set.
+- **multi_query adds one query-generation call** (+18% tokens, +1 s) and RRF fusion, also without a measurable gain.
+
+Costs are for `gpt-4o-mini` as reported by LangSmith; embedding calls (`text-embedding-3-small`) are not included, but they are
+small (one query embedding per search; five for multi_query). Latencies here differ from the evaluation table above because
+they were measured on a different machine and network.
 
 ### Recall@k diagnostic (`recall_at_k.py`)
 
@@ -344,6 +368,8 @@ These changes were made before the final runs reported above.
 | `check_questions.py` | Offline sanity checks for `questions.json` |
 | `evaluate.py` | Runs all configs, LLM judge, writes `results/eval_results.json` |
 | `recall_at_k.py` | Recall@k before and after reranking, writes `results/recall_at_k.json` |
+| `profile_configs.py` | Runs every config once per question with LangSmith tags, for cost and latency |
+| `cost_report.py` | Tokens, cost and latency per config, from the LangSmith traces |
 | `diagnostics/debug_evidence.py` | Is an evidence snippet inside one chunk, and where does it rank? |
 | `diagnostics/show_chunks.py` | Print all chunks of one page |
 | `diagnostics/inspect_answers.py` | Print retrieved chunks and answers for chosen questions |
